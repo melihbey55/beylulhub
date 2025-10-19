@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Sözlük - BeylulHub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Anton', sans-serif;
+    }
+    
+    body {
+      background-color: #000;
+      color: white;
+      overflow-x: hidden;
+    }
+    
+    /* Header Styles */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 30px;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 100;
+      background-color: rgba(0, 0, 0, 0.9);
+      border-bottom: 2px solid #FF8C00;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+    
+    .logo-text {
+      font-size: 28px;
+      color: white;
+      letter-spacing: 1px;
+    }
+    
+    .hub {
+      background-color: #FF8C00;
+      color: white;
+      padding: 2px 10px;
+      border-radius: 8px;
+      margin-left: 5px;
+    }
+    
+    .menu-icon {
+      font-size: 28px;
+      cursor: pointer;
+      color: white;
+      padding: 5px 10px;
+      border: 2px solid #FF8C00;
+      border-radius: 5px;
+    }
+    
+    /* Menu Panel */
+    .menu-panel {
+      position: fixed;
+      top: 0;
+      right: -300px;
+      width: 300px;
+      height: 100%;
+      background-color: #111;
+      transition: right 0.3s ease;
+      z-index: 200;
+      padding: 30px;
+      overflow-y: auto;
+      border-left: 3px solid #FF8C00;
+    }
+    
+    .menu-panel.active {
+      right: 0;
+    }
+    
+    .logo-panel {
+      font-size: 24px;
+      color: white;
+      margin-bottom: 30px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #333;
+    }
+    
+    .menu-panel a {
+      display: block;
+      color: white;
+      text-decoration: none;
+      font-size: 20px;
+      margin-bottom: 20px;
+      padding: 12px 15px;
+      border-radius: 8px;
+      transition: all 0.3s;
+    }
+    
+    .menu-panel a:hover {
+      background-color: #222;
+      color: #FF8C00;
+      transform: translateX(10px);
+    }
+    
+    /* Overlay */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      z-index: 150;
+      display: none;
+    }
+    
+    .overlay.active {
+      display: block;
+    }
+    
+    /* Main Content */
+    main {
+      padding: 100px 20px 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    
+    /* Form Box */
+    .form-box {
+      background-color: #111;
+      padding: 30px;
+      border-radius: 15px;
+      margin-bottom: 40px;
+      border: 2px solid #333;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    }
+    
+    .form-title {
+      color: #FF8C00;
+      font-size: 24px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    
+    .form-box input, .form-box textarea {
+      width: 100%;
+      padding: 15px;
+      margin-bottom: 20px;
+      background-color: #222;
+      border: 2px solid #333;
+      border-radius: 8px;
+      color: white;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+    
+    .form-box input:focus, .form-box textarea:focus {
+      outline: none;
+      border-color: #FF8C00;
+    }
+    
+    .form-box button {
+      background-color: #FF8C00;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 18px;
+      width: 100%;
+      transition: background-color 0.3s;
+    }
+    
+    .form-box button:hover {
+      background-color: #e67e00;
+    }
+    
+    /* Sözlük Listesi */
+    #sozlukListesi {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 25px;
+    }
+    
+    .soz-karti {
+      background-color: #111;
+      border-radius: 15px;
+      padding: 25px;
+      transition: all 0.3s;
+      border: 2px solid #333;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .soz-karti:hover {
+      transform: translateY(-10px);
+      border-color: #FF8C00;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    }
+    
+    .soz-karti::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background-color: #FF8C00;
+    }
+    
+    .soz-baslik {
+      color: #FF8C00;
+      margin-bottom: 15px;
+      font-size: 22px;
+      border-bottom: 1px solid #333;
+      padding-bottom: 10px;
+    }
+    
+    .soz-anlam {
+      color: #ccc;
+      line-height: 1.5;
+      font-size: 16px;
+      margin-bottom: 15px;
+    }
+    
+    .soz-yazar {
+      color: #FF8C00;
+      font-style: italic;
+      font-size: 16px;
+      text-align: right;
+    }
+    
+    .soz-tarih {
+      color: #777;
+      font-size: 14px;
+      margin-top: 15px;
+      text-align: right;
+    }
+    
+    /* Quote icon */
+    .soz-karti::after {
+      content: '"';
+      position: absolute;
+      top: 20px;
+      right: 25px;
+      font-size: 60px;
+      color: #FF8C00;
+      opacity: 0.2;
+      font-family: serif;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .logo-text {
+        font-size: 22px;
+      }
+      
+      .menu-icon {
+        font-size: 22px;
+      }
+      
+      .menu-panel {
+        width: 280px;
+      }
+      
+      #sozlukListesi {
+        grid-template-columns: 1fr;
+      }
+      
+      main {
+        padding: 90px 15px 30px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      header {
+        padding: 15px 20px;
+      }
+      
+      .logo-text {
+        font-size: 18px;
+      }
+      
+      .menu-icon {
+        font-size: 18px;
+      }
+      
+      .form-box {
+        padding: 20px;
+      }
+      
+      .soz-karti {
+        padding: 20px;
+      }
+      
+      .soz-karti::after {
+        font-size: 40px;
+        top: 15px;
+        right: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <span class="logo-text">BEYLUL <span class="hub">HUB</span></span>
+    </div>
+    <div class="menu-icon" onclick="toggleMenu()">
+      <i class="fas fa-bars"></i>
+    </div>
+  </header>
+
+  <div class="menu-panel" id="menuPanel">
+    <div class="logo-panel">BEYLUL <span class="hub">HUB</span></div>
+    <a href="index.html">ANA SAYFA</a>
+    <a href="anidefteri.html">ANI DEFTERİ</a>
+    <a href="sozluk.html">SÖZLÜK</a>
+    <a href="eylul.html">EYLÜL</a>
+  </div>
+
+  <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+  <main>
+    <div class="form-box">
+      <h2 class="form-title">YENİ SÖZ EKLEYİN</h2>
+      <input type="text" id="soz" placeholder="O meşhur sözü girin..">
+      <textarea id="anlam" placeholder="Sözü anlatın" rows="5"></textarea>
+      <input type="text" id="yazar" placeholder="Söz Sahibi:">
+      <button onclick="ekleSoz()">GÖNDER</button>
+    </div>
+
+    <div id="sozlukListesi">
+      <!-- Örnek sözler -->
+      <div class="soz-karti">
+        <div class="soz-baslik">Ekipteniz abi</div>
+        <div class="soz-anlam">Gitarı çıkarmış haykonun kulise gelmesini beklerken sıradan bi korumanın gelip "ekiptenmisiniz burda ne işiniz var" demesi üzerine bekirin "kendineden emin olursan kimse bisey diyemeyez" dusuncesiyle "ekipteniz" demesidir. Bu söz, özgüvenin ve kararlılığın önemini vurgular.</div>
+        <div class="soz-yazar">Bekir Kardeşin Sözüdür</div>
+        <div class="soz-tarih">07 Eyl 2023</div>
+      </div>
+      
+      <div class="soz-karti">
+        <div class="soz-baslik">Hayat devam ediyor</div>
+        <div class="soz-anlam">Zor zamanlarda bile hayatın devam ettiğini ve her şeyin düzeleceğini anlatan bir söz. Zorluklar geçicidir, önemli olan pes etmemektir. Bu söz, insanlara umut ve motivasyon verir.</div>
+        <div class="soz-yazar">Eylül'ün Sözüdür</div>
+        <div class="soz-tarih">25 Ağu 2023</div>
+      </div>
+      
+      <div class="soz-karti">
+        <div class="soz-baslik">Güneş her gün doğar</div>
+        <div class="soz-anlam">Ne kadar kötü bir gün geçirirsen geçir, ertesi gün yeni bir başlangıçtır. Güneş her sabah yeniden doğar ve sana yeni bir şans verir. Bu söz, her günün yeni fırsatlarla dolu olduğunu hatırlatır.</div>
+        <div class="soz-yazar">Eylül'ün Sözüdür</div>
+        <div class="soz-tarih">12 Tem 2023</div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Menü açma/kapama fonksiyonu
+    function toggleMenu() {
+      const menuPanel = document.getElementById('menuPanel');
+      const overlay = document.getElementById('overlay');
+      
+      menuPanel.classList.toggle('active');
+      overlay.classList.toggle('active');
+    }
+    
+    // Söz ekleme fonksiyonu
+    function ekleSoz() {
+      const soz = document.getElementById('soz').value;
+      const anlam = document.getElementById('anlam').value;
+      const yazar = document.getElementById('yazar').value;
+      
+      if (soz && anlam && yazar) {
+        const sozlukListesi = document.getElementById('sozlukListesi');
+        
+        // Yeni söz kartı oluştur
+        const yeniSoz = document.createElement('div');
+        yeniSoz.className = 'soz-karti';
+        
+        // Tarih oluştur
+        const tarih = new Date();
+        const aylar = ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas', 'Ara'];
+        const tarihStr = `${tarih.getDate()} ${aylar[tarih.getMonth()]} ${tarih.getFullYear()}`;
+        
+        // Söz içeriğini oluştur
+        yeniSoz.innerHTML = `
+          <div class="soz-baslik">${soz}</div>
+          <div class="soz-anlam">${anlam}</div>
+          <div class="soz-yazar">${yazar}</div>
+          <div class="soz-tarih">${tarihStr}</div>
+        `;
+        
+        // Sözü listenin en üstüne ekle
+        sozlukListesi.prepend(yeniSoz);
+        
+        // Formu temizle
+        document.getElementById('soz').value = '';
+        document.getElementById('anlam').value = '';
+        document.getElementById('yazar').value = '';
+        
+        // Başarı mesajı
+        alert('Sözünüz başarıyla eklendi!');
+      } else {
+        alert('Lütfen tüm alanları doldurun!');
+      }
+    }
+    
+    // Sayfa yüklendiğinde örnek sözleri yükle
+    document.addEventListener('DOMContentLoaded', function() {
+      // Örnek sözler zaten HTML'de mevcut
+    });
+  </script>
+</body>
+</html>

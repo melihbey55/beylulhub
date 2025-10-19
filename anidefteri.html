@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Anı Defteri - BeylulHub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Anton', sans-serif;
+    }
+    
+    body {
+      background-color: #000;
+      color: white;
+      overflow-x: hidden;
+    }
+    
+    /* Header Styles */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 30px;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 100;
+      background-color: rgba(0, 0, 0, 0.9);
+      border-bottom: 2px solid #FF8C00;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+    
+    .logo-text {
+      font-size: 28px;
+      color: white;
+      letter-spacing: 1px;
+    }
+    
+    .hub {
+      background-color: #FF8C00;
+      color: white;
+      padding: 2px 10px;
+      border-radius: 8px;
+      margin-left: 5px;
+    }
+    
+    .menu-icon {
+      font-size: 28px;
+      cursor: pointer;
+      color: white;
+      padding: 5px 10px;
+      border: 2px solid #FF8C00;
+      border-radius: 5px;
+    }
+    
+    /* Menu Panel */
+    .menu-panel {
+      position: fixed;
+      top: 0;
+      right: -300px;
+      width: 300px;
+      height: 100%;
+      background-color: #111;
+      transition: right 0.3s ease;
+      z-index: 200;
+      padding: 30px;
+      overflow-y: auto;
+      border-left: 3px solid #FF8C00;
+    }
+    
+    .menu-panel.active {
+      right: 0;
+    }
+    
+    .logo-panel {
+      font-size: 24px;
+      color: white;
+      margin-bottom: 30px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #333;
+    }
+    
+    .menu-panel a {
+      display: block;
+      color: white;
+      text-decoration: none;
+      font-size: 20px;
+      margin-bottom: 20px;
+      padding: 12px 15px;
+      border-radius: 8px;
+      transition: all 0.3s;
+    }
+    
+    .menu-panel a:hover {
+      background-color: #222;
+      color: #FF8C00;
+      transform: translateX(10px);
+    }
+    
+    /* Overlay */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      z-index: 150;
+      display: none;
+    }
+    
+    .overlay.active {
+      display: block;
+    }
+    
+    /* Main Content */
+    main {
+      padding: 100px 20px 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    
+    /* Form Box */
+    .form-box {
+      background-color: #111;
+      padding: 30px;
+      border-radius: 15px;
+      margin-bottom: 40px;
+      border: 2px solid #333;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    }
+    
+    .form-box input, .form-box textarea {
+      width: 100%;
+      padding: 15px;
+      margin-bottom: 20px;
+      background-color: #222;
+      border: 2px solid #333;
+      border-radius: 8px;
+      color: white;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+    
+    .form-box input:focus, .form-box textarea:focus {
+      outline: none;
+      border-color: #FF8C00;
+    }
+    
+    .form-box button {
+      background-color: #FF8C00;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 18px;
+      width: 100%;
+      transition: background-color 0.3s;
+    }
+    
+    .form-box button:hover {
+      background-color: #e67e00;
+    }
+    
+    /* Anı Listesi */
+    #aniListesi {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 25px;
+    }
+    
+    .ani-karti {
+      background-color: #111;
+      border-radius: 15px;
+      padding: 25px;
+      transition: all 0.3s;
+      border: 2px solid #333;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .ani-karti:hover {
+      transform: translateY(-10px);
+      border-color: #FF8C00;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    }
+    
+    .ani-karti::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background-color: #FF8C00;
+    }
+    
+    .ani-resim {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      border: 2px solid #333;
+    }
+    
+    .ani-adi {
+      color: #FF8C00;
+      margin-bottom: 10px;
+      font-size: 22px;
+    }
+    
+    .ani-metin {
+      color: #ccc;
+      line-height: 1.5;
+      font-size: 16px;
+    }
+    
+    .ani-tarih {
+      color: #777;
+      font-size: 14px;
+      margin-top: 15px;
+      text-align: right;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .logo-text {
+        font-size: 22px;
+      }
+      
+      .menu-icon {
+        font-size: 22px;
+      }
+      
+      .menu-panel {
+        width: 280px;
+      }
+      
+      #aniListesi {
+        grid-template-columns: 1fr;
+      }
+      
+      main {
+        padding: 90px 15px 30px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      header {
+        padding: 15px 20px;
+      }
+      
+      .logo-text {
+        font-size: 18px;
+      }
+      
+      .menu-icon {
+        font-size: 18px;
+      }
+      
+      .form-box {
+        padding: 20px;
+      }
+      
+      .ani-karti {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <span class="logo-text">BEYLUL <span class="hub">HUB</span></span>
+    </div>
+    <div class="menu-icon" onclick="toggleMenu()">
+      <i class="fas fa-bars"></i>
+    </div>
+  </header>
+
+  <div class="menu-panel" id="menuPanel">
+    <div class="logo-panel">BEYLUL <span class="hub">HUB</span></div>
+    <a href="index.html">ANA SAYFA</a>
+    <a href="anidefteri.html">ANI DEFTERİ</a>
+    <a href="sozluk.html">SÖZLÜK</a>
+    <a href="eylul.html">EYLÜL</a>
+  </div>
+
+  <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+  <main>
+    <div class="form-box">
+      <input type="text" id="adi" placeholder="İsminizi girin">
+      <textarea id="metin" placeholder="Anınızı yazın" rows="5"></textarea>
+      <input type="file" id="foto">
+      <button onclick="ekleAni()">ANINIZI EKLEYİN</button>
+    </div>
+
+    <div id="aniListesi">
+      <!-- Örnek anılar -->
+      <div class="ani-karti">
+        <img src="https://via.placeholder.com/350x200" alt="Anı Resmi" class="ani-resim">
+        <div class="ani-adi">Ahmet</div>
+        <div class="ani-metin">Eylül'le tanıştığımız günü asla unutmayacağım! Harika bir insan ve müthiş bir arkadaş. Onunla geçirdiğimiz her an çok özel.</div>
+        <div class="ani-tarih">15 Eyl 2023</div>
+      </div>
+      
+      <div class="ani-karti">
+        <img src="https://via.placeholder.com/350x200" alt="Anı Resmi" class="ani-resim">
+        <div class="ani-adi">Mehmet</div>
+        <div class="ani-metin">Eylül'ün doğum günü partisi unutulmazdı! Herkes çok eğlendi ve harika anılar biriktirdik. O geceyi asla unutmayacağız.</div>
+        <div class="ani-tarih">10 Ağu 2023</div>
+      </div>
+      
+      <div class="ani-karti">
+        <img src="https://via.placeholder.com/350x200" alt="Anı Resmi" class="ani-resim">
+        <div class="ani-adi">Ayşe</div>
+        <div class="ani-metin">Eylül'le okul yıllarımız... Ne güzel günlerdi! Hep birlikte çok eğlenirdik. Onun enerjisi ve pozitifliği herkesi etkilerdi.</div>
+        <div class="ani-tarih">05 Tem 2023</div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Menü açma/kapama fonksiyonu
+    function toggleMenu() {
+      const menuPanel = document.getElementById('menuPanel');
+      const overlay = document.getElementById('overlay');
+      
+      menuPanel.classList.toggle('active');
+      overlay.classList.toggle('active');
+    }
+    
+    // Anı ekleme fonksiyonu
+    function ekleAni() {
+      const adi = document.getElementById('adi').value;
+      const metin = document.getElementById('metin').value;
+      const foto = document.getElementById('foto').files[0];
+      
+      if (adi && metin) {
+        const aniListesi = document.getElementById('aniListesi');
+        
+        // Yeni anı kartı oluştur
+        const yeniAni = document.createElement('div');
+        yeniAni.className = 'ani-karti';
+        
+        // Fotoğrafı işle
+        let fotoHTML = '';
+        if (foto) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            yeniAni.querySelector('.ani-resim').src = e.target.result;
+          };
+          reader.readAsDataURL(foto);
+          fotoHTML = `<img src="" alt="Anı Resmi" class="ani-resim">`;
+        } else {
+          fotoHTML = `<img src="https://via.placeholder.com/350x200" alt="Anı Resmi" class="ani-resim">`;
+        }
+        
+        // Tarih oluştur
+        const tarih = new Date();
+        const gunler = ['Paz', 'Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt'];
+        const aylar = ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas', 'Ara'];
+        const tarihStr = `${tarih.getDate()} ${aylar[tarih.getMonth()]} ${tarih.getFullYear()}`;
+        
+        // Anı içeriğini oluştur
+        yeniAni.innerHTML = `
+          ${fotoHTML}
+          <div class="ani-adi">${adi}</div>
+          <div class="ani-metin">${metin}</div>
+          <div class="ani-tarih">${tarihStr}</div>
+        `;
+        
+        // Anıyı listenin en üstüne ekle
+        aniListesi.prepend(yeniAni);
+        
+        // Formu temizle
+        document.getElementById('adi').value = '';
+        document.getElementById('metin').value = '';
+        document.getElementById('foto').value = '';
+        
+        // Başarı mesajı
+        alert('Anınız başarıyla eklendi!');
+      } else {
+        alert('Lütfen isim ve metin alanlarını doldurun!');
+      }
+    }
+    
+    // Sayfa yüklendiğinde örnek anıları yükle
+    document.addEventListener('DOMContentLoaded', function() {
+      // Örnek anılar zaten HTML'de mevcut
+    });
+  </script>
+</body>
+</html>
