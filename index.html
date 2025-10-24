@@ -1,42 +1,2051 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <title>Beylul Hub</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLACKLEAGUE - Blackjack Oyunu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+    <style>
+        /* TEMEL AYARLAR */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000000;
+            color: white;
+            font-family: 'Anton', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* HEADER STİLLERİ */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 3px solid #0a5f38;
+            width: 100%;
+            gap: 40px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-shrink: 0;
+        }
+
+        .site-logo {
+            width: 80px;
+            height: 80px;
+            background-color: #0a5f38;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            border-radius: 10px;
+            border: 2px solid gold;
+        }
+
+        .logo-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        .logo-btn:hover {
+            background: rgba(10, 95, 56, 0.2);
+        }
+
+        header h1 {
+            color: white;
+            font-size: 4.5em;
+            letter-spacing: 3px;
+            margin: 0;
+            transition: all 0.3s;
+            font-family: 'Anton', sans-serif;
+        }
+
+        .logo-btn:hover h1 {
+            color: #0a5f38;
+            transform: scale(1.05);
+        }
+
+        header h1 span {
+            color: #0a5f38;
+            transition: all 0.3s;
+            font-family: 'Anton', sans-serif;
+        }
+
+        .logo-btn:hover h1 span {
+            color: white;
+        }
+
+        /* ANA NAVİGASYON MENÜSÜ */
+        .main-nav {
+            display: flex;
+            gap: 50px;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .nav-item {
+            color: white;
+            text-decoration: none;
+            font-size: 1.6em;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+            padding: 10px 20px;
+            position: relative;
+            border-radius: 8px;
+            font-family: 'Anton', sans-serif;
+        }
+
+        .nav-item:hover {
+            color: #0a5f38;
+            background: rgba(10, 95, 56, 0.1);
+        }
+
+        /* GİRİŞ/KAYIT BUTONLARI */
+        .auth-nav {
+            display: flex;
+            gap: 20px;
+            flex-shrink: 0;
+        }
+
+        .nav-btn {
+            background-color: #0a5f38;
+            color: white;
+            text-decoration: none;
+            padding: 15px 35px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-family: 'Anton', sans-serif;
+            letter-spacing: 1.5px;
+            font-size: 1.4em;
+            white-space: nowrap;
+            border: 2px solid transparent;
+        }
+
+        .nav-btn:hover {
+            background-color: #083b24;
+            border-color: #00ff88;
+            transform: translateY(-2px);
+        }
+
+        /* EKRAN YÖNETİMİ */
+        .screen {
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        /* ANA EKRAN STİLLERİ */
+        .welcome-screen {
+            text-align: center;
+            margin-top: 80px;
+            padding: 0 20px;
+        }
+
+        .welcome-screen h2 {
+            font-size: 4em;
+            margin-bottom: 60px;
+            color: white;
+            letter-spacing: 4px;
+            line-height: 1.2;
+            text-shadow: 0 0 20px rgba(10, 95, 56, 0.5);
+            font-family: 'Anton', sans-serif;
+        }
+
+        .game-modes {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .mode-btn {
+            background: linear-gradient(145deg, #0a5f38, #083b24);
+            color: white;
+            border: none;
+            padding: 30px 60px;
+            font-size: 1.8em;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-width: 280px;
+            font-family: 'Anton', sans-serif;
+            letter-spacing: 2.5px;
+            border: 3px solid transparent;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .mode-btn:hover {
+            transform: translateY(-8px);
+            border-color: #00ff88;
+            box-shadow: 0 15px 35px rgba(0,255,136,0.2);
+        }
+
+        .online-highlight {
+            background: linear-gradient(145deg, #0d7a46, #0a5f38);
+            transform: scale(1.1);
+            border: 3px solid #00ff88;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 20px rgba(0,255,136,0.4); }
+            50% { box-shadow: 0 0 40px rgba(0,255,136,0.8); }
+            100% { box-shadow: 0 0 20px rgba(0,255,136,0.4); }
+        }
+
+        /* BOT SEÇİM EKRANI */
+        .selection-screen {
+            text-align: center;
+            margin-top: 60px;
+            padding: 0 20px;
+        }
+
+        .selection-screen h2 {
+            font-size: 3.5em;
+            margin-bottom: 50px;
+            color: white;
+            letter-spacing: 3px;
+            text-shadow: 0 0 15px rgba(10, 95, 56, 0.5);
+            font-family: 'Anton', sans-serif;
+        }
+
+        .difficulty-levels {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
+        }
+
+        .level-card {
+            background: linear-gradient(145deg, #0a5f38, #083b24);
+            padding: 30px 25px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-width: 250px;
+            border: 3px solid transparent;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .level-card:hover {
+            transform: translateY(-10px);
+            border-color: #00ff88;
+            box-shadow: 0 15px 35px rgba(0,255,136,0.2);
+        }
+
+        .level-card.highlight {
+            background: linear-gradient(145deg, #0d7a46, #0a5f38);
+            border-color: #00ff88;
+            transform: scale(1.05);
+        }
+
+        .level-card.highlight:hover {
+            transform: scale(1.05) translateY(-10px);
+        }
+
+        .level-icon {
+            font-size: 3.5em;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+
+        .level-card h3 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            font-family: 'Anton', sans-serif;
+        }
+
+        .level-card p {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            opacity: 0.9;
+            letter-spacing: 1px;
+            font-family: 'Anton', sans-serif;
+        }
+
+        .level-stats {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 1em;
+            border: 1px solid rgba(255,255,255,0.1);
+            font-family: 'Anton', sans-serif;
+        }
+
+        /* GERİ BUTONU */
+        .back-btn {
+            background: linear-gradient(145deg, #333, #555);
+            color: white;
+            border: none;
+            padding: 18px 45px;
+            font-size: 1.4em;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Anton', sans-serif;
+            letter-spacing: 2px;
+            border: 2px solid transparent;
+        }
+
+        .back-btn:hover {
+            background: linear-gradient(145deg, #555, #777);
+            border-color: #00ff88;
+            transform: translateY(-3px);
+        }
+
+        /* OYUN MASASI STİLLERİ */
+        .game-table-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 20px auto;
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+            border: 15px solid #5d4037;
+        }
+
+        .table-background {
+            width: 100%;
+            height: 600px;
+            background: linear-gradient(135deg, #0a3f1f 0%, #0a5f38 100%);
+            position: relative;
+        }
+
+        .game-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 30px;
+        }
+
+        .player-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .player-stats {
+            background: rgba(0,0,0,0.85);
+            padding: 15px 25px;
+            border-radius: 15px;
+            border: 2px solid #0a5f38;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .player-stats h3 {
+            font-size: 1.4em;
+            margin-bottom: 8px;
+            color: #00ff88;
+            text-shadow: 0 0 10px rgba(0,255,136,0.5);
+            font-family: 'Anton', sans-serif;
+        }
+
+        .player-stats p {
+            font-size: 1.1em;
+            color: #ccc;
+            font-family: 'Anton', sans-serif;
+        }
+
+        /* KART ALANLARI */
+        .card-area {
+            display: flex;
+            flex-direction: column;
+            gap: 50px;
+            height: calc(100% - 120px);
+            justify-content: space-between;
+        }
+
+        .dealer-area, .player-area {
+            text-align: center;
+        }
+
+        .area-title {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.7);
+            padding: 10px 20px;
+            border-radius: 10px;
+            display: inline-block;
+            border: 1px solid rgba(255,255,255,0.1);
+            font-family: 'Anton', sans-serif;
+        }
+
+        .cards-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            min-height: 140px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        /* KART STİLLERİ */
+        .card {
+            width: 100px;
+            height: 140px;
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 10px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+            position: relative;
+            transition: all 0.3s;
+            border: 2px solid gold;
+        }
+
+        .card:hover {
+            transform: translateY(-5px) rotate(2deg);
+            box-shadow: 0 10px 25px rgba(255,215,0,0.3);
+        }
+
+        .card.red {
+            color: #d32f2f;
+            background: linear-gradient(145deg, #ffffff, #f0f0f0);
+        }
+
+        .card.black {
+            color: #000000;
+            background: linear-gradient(145deg, #ffffff, #f0f0f0);
+        }
+
+        .card-back {
+            background: linear-gradient(45deg, #0a5f38, #083b24);
+            border: 3px solid gold;
+        }
+
+        .card-value {
+            font-size: 1.6em;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            font-family: 'Anton', sans-serif;
+        }
+
+        .card-suit {
+            font-size: 2em;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .card-corner {
+            font-size: 1.1em;
+            line-height: 1;
+            font-weight: bold;
+            font-family: 'Anton', sans-serif;
+        }
+
+        .card-corner.top {
+            align-self: flex-start;
+        }
+
+        .card-corner.bottom {
+            align-self: flex-end;
+            transform: rotate(180deg);
+        }
+
+        /* LİG VE COIN BİLGİSİ */
+        .game-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+        }
+
+        .stat-box {
+            background: linear-gradient(145deg, #0a5f38, #083b24);
+            padding: 15px 30px;
+            border-radius: 15px;
+            border: 2px solid gold;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            min-width: 150px;
+        }
+
+        .stat-box h3 {
+            font-size: 1.1em;
+            color: gold;
+            margin-bottom: 8px;
+            text-shadow: 0 0 10px rgba(255,215,0,0.5);
+            font-family: 'Anton', sans-serif;
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            color: white;
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
+            font-family: 'Anton', sans-serif;
+        }
+
+        /* OYUN SONU MESAJI */
+        .game-result {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.95);
+            padding: 40px 60px;
+            border-radius: 20px;
+            border: 5px solid #0a5f38;
+            box-shadow: 0 0 50px rgba(0,255,136,0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .result-title {
+            font-size: 5em;
+            letter-spacing: 4px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            font-family: 'Anton', sans-serif;
+        }
+
+        .result-win {
+            color: #00ff88;
+            text-shadow: 0 0 30px rgba(0,255,136,0.8);
+        }
+
+        .result-lose {
+            color: #ff4444;
+            text-shadow: 0 0 30px rgba(255,68,68,0.8);
+        }
+
+        .result-draw {
+            color: #ffaa00;
+            text-shadow: 0 0 30px rgba(255,170,0,0.8);
+        }
+
+        .result-reward {
+            font-size: 2.5em;
+            color: white;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            font-family: 'Anton', sans-serif;
+        }
+
+        .coin-icon {
+            color: gold;
+            font-size: 1.2em;
+        }
+
+        .continue-btn {
+            background: linear-gradient(145deg, #0a5f38, #083b24);
+            color: white;
+            border: none;
+            padding: 20px 50px;
+            font-size: 1.5em;
+            border-radius: 12px;
+            cursor: pointer;
+            margin-top: 30px;
+            font-family: 'Anton', sans-serif;
+            letter-spacing: 2px;
+            border: 3px solid #00ff88;
+            transition: all 0.3s;
+        }
+
+        .continue-btn:hover {
+            background: linear-gradient(145deg, #0d7a46, #0a5f38);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,255,136,0.3);
+        }
+
+        /* OYUN KONTROLLERİ */
+        .game-controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .control-btn {
+            background: linear-gradient(145deg, #0a5f38, #083b24);
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            font-size: 1.3em;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Anton', sans-serif;
+            letter-spacing: 1.5px;
+            min-width: 150px;
+            border: 2px solid transparent;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .control-btn:hover:not(:disabled) {
+            background: linear-gradient(145deg, #0d7a46, #0a5f38);
+            border-color: #00ff88;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,255,136,0.3);
+        }
+
+        .control-btn:disabled {
+            background: #333;
+            cursor: not-allowed;
+            opacity: 0.6;
+            transform: none;
+        }
+
+        /* BEKLEME EKRANI STİLLERİ */
+        .waiting-screen {
+            text-align: center;
+            margin-top: 100px;
+            padding: 0 20px;
+        }
+
+        .waiting-screen h2 {
+            font-size: 3em;
+            margin-bottom: 40px;
+            color: white;
+            letter-spacing: 3px;
+            text-shadow: 0 0 15px rgba(10, 95, 56, 0.5);
+            font-family: 'Anton', sans-serif;
+        }
+
+        .loading-spinner {
+            border: 8px solid #0a5f38;
+            border-top: 8px solid #00ff88;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 30px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .waiting-message {
+            font-size: 1.5em;
+            margin-bottom: 30px;
+            color: #00ff88;
+            text-shadow: 0 0 10px rgba(0,255,136,0.5);
+            font-family: 'Anton', sans-serif;
+        }
+
+        .room-code-section {
+            background: linear-gradient(145deg, rgba(10, 95, 56, 0.3), rgba(8, 59, 36, 0.3));
+            padding: 25px;
+            border-radius: 20px;
+            margin: 30px auto;
+            max-width: 500px;
+            border: 3px solid #0a5f38;
+            backdrop-filter: blur(10px);
+        }
+
+        .room-code-section h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: #00ff88;
+            font-family: 'Anton', sans-serif;
+        }
+
+        .code-display {
+            font-size: 3em;
+            letter-spacing: 8px;
+            background: rgba(0,0,0,0.7);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 3px solid gold;
+            text-shadow: 0 0 10px rgba(255,215,0,0.5);
+            font-family: 'Anton', sans-serif;
+        }
+
+        .copy-btn {
+            background: linear-gradient(145deg, #0a5f38, #083b24);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Anton', sans-serif;
+            letter-spacing: 1px;
+            font-size: 1.2em;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            margin: 10px;
+        }
+
+        .copy-btn:hover {
+            background: linear-gradient(145deg, #0d7a46, #0a5f38);
+            border-color: #00ff88;
+            transform: translateY(-3px);
+        }
+
+        /* ODA KODU GİRİŞ EKRANI */
+        .code-input-container {
+            max-width: 400px;
+            margin: 30px auto;
+            text-align: center;
+        }
+
+        .code-input {
+            width: 100%;
+            padding: 20px;
+            font-size: 1.8em;
+            text-align: center;
+            border-radius: 15px;
+            border: 3px solid #0a5f38;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            font-family: 'Anton', sans-serif;
+            letter-spacing: 5px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .code-input::placeholder {
+            color: #666;
+            letter-spacing: 2px;
+        }
+
+        .player-count {
+            font-size: 1.2em;
+            margin: 20px 0;
+            color: #00ff88;
+            font-family: 'Anton', sans-serif;
+        }
+
+        /* OYUNCU LİSTESİ */
+        .players-waiting {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .player-badge {
+            background: linear-gradient(145deg, #0a5f38, #083b24);
+            padding: 15px 25px;
+            border-radius: 10px;
+            border: 2px solid #00ff88;
+            min-width: 150px;
+        }
+
+        .player-badge h4 {
+            color: #00ff88;
+            margin-bottom: 5px;
+            font-family: 'Anton', sans-serif;
+        }
+
+        /* ONLINE OYUNCU BİLGİSİ */
+        .online-player-info {
+            background: rgba(0,0,0,0.8);
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: 2px solid #0a5f38;
+            margin: 10px 0;
+        }
+
+        .online-player-info h4 {
+            color: #00ff88;
+            margin-bottom: 5px;
+            font-family: 'Anton', sans-serif;
+        }
+
+        /* MAĞAZA EKRANI */
+        .store-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+            padding: 0 20px;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .store-item {
+            background: linear-gradient(145deg, rgba(10, 95, 56, 0.3), rgba(8, 59, 36, 0.3));
+            border: 3px solid #0a5f38;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .store-item:hover {
+            transform: translateY(-10px);
+            border-color: #00ff88;
+            box-shadow: 0 15px 35px rgba(0,255,136,0.2);
+        }
+
+        .card-preview {
+            width: 120px;
+            height: 168px;
+            margin: 20px auto;
+            border-radius: 10px;
+            background-size: cover;
+            background-position: center;
+            border: 3px solid gold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+
+        .preview-classic {
+            background: linear-gradient(145deg, #ffffff, #f0f0f0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #d32f2f;
+            font-size: 3em;
+        }
+
+        .preview-black-red {
+            background: linear-gradient(145deg, #000000, #333333);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #d32f2f;
+            font-size: 3em;
+            border: 3px solid #d32f2f;
+        }
+
+        .preview-black-gold {
+            background: linear-gradient(145deg, #000000, #333333);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: gold;
+            font-size: 3em;
+        }
+
+        .item-price {
+            background: linear-gradient(145deg, gold, #b8860b);
+            color: black;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 1.3em;
+            margin: 20px 0;
+            display: inline-block;
+            box-shadow: 0 3px 10px rgba(255,215,0,0.3);
+            border: 2px solid #ffd700;
+            font-family: 'Anton', sans-serif;
+        }
+
+        .buy-btn {
+            background: linear-gradient(145deg, #0a5f38, #083b24);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Anton', sans-serif;
+            letter-spacing: 1px;
+            font-size: 1.1em;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+        }
+
+        .buy-btn:hover {
+            background: linear-gradient(145deg, #0d7a46, #0a5f38);
+            border-color: #00ff88;
+            transform: translateY(-3px);
+        }
+
+        .buy-btn.owned {
+            background: #333;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* MOBILE UYUM */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            header {
+                flex-direction: column;
+                gap: 20px;
+                padding: 15px 0;
+            }
+            
+            .logo-container {
+                justify-content: center;
+            }
+            
+            .site-logo {
+                width: 60px;
+                height: 60px;
+            }
+            
+            header h1 {
+                font-size: 3em;
+            }
+            
+            .main-nav {
+                order: 2;
+                gap: 15px;
+                flex-wrap: wrap;
+            }
+            
+            .nav-item {
+                font-size: 1.3em;
+                padding: 8px 15px;
+            }
+            
+            .auth-nav {
+                order: 3;
+                gap: 10px;
+            }
+            
+            .nav-btn {
+                padding: 12px 25px;
+                font-size: 1.2em;
+            }
+            
+            .welcome-screen {
+                margin-top: 50px;
+            }
+            
+            .welcome-screen h2 {
+                font-size: 2.5em;
+                margin-bottom: 40px;
+            }
+            
+            .game-modes {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .mode-btn {
+                width: 100%;
+                padding: 25px 30px;
+                font-size: 1.5em;
+                min-width: unset;
+            }
+            
+            .online-highlight {
+                transform: none;
+            }
+            
+            .table-background {
+                height: 500px;
+            }
+            
+            .game-content {
+                padding: 20px;
+            }
+            
+            .player-info {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .card {
+                width: 70px;
+                height: 98px;
+            }
+            
+            .game-stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .game-controls {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
+            .control-btn {
+                padding: 15px 20px;
+                font-size: 1.1em;
+                min-width: 120px;
+            }
+            
+            .store-items {
+                grid-template-columns: 1fr;
+            }
+            
+            .card-preview {
+                width: 100px;
+                height: 140px;
+            }
+            
+            .result-title {
+                font-size: 3em;
+                padding: 20px 40px;
+            }
+            
+            .result-reward {
+                font-size: 1.8em;
+            }
+        }
+
+        /* KÜÇÜK MOBILE */
+        @media (max-width: 480px) {
+            .welcome-screen h2 {
+                font-size: 2em;
+            }
+            
+            .mode-btn {
+                padding: 20px 25px;
+                font-size: 1.3em;
+            }
+            
+            .table-background {
+                height: 450px;
+            }
+            
+            .card {
+                width: 60px;
+                height: 84px;
+            }
+            
+            .card-value {
+                font-size: 1.2em;
+            }
+            
+            .card-suit {
+                font-size: 1.4em;
+            }
+            
+            .control-btn {
+                padding: 12px 15px;
+                font-size: 1em;
+                min-width: 100px;
+            }
+            
+            .result-title {
+                font-size: 2.5em;
+                padding: 15px 30px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <!-- ÜST MENÜ -->
-  <header>
-    <div class="logo">
-      <span>BEYLUL</span> <span class="hub">HUB</span>
-    </div>
-    <div class="menu-btn" onclick="toggleMenu()">
-      <div></div>
-      <div></div>
-      <div></div>
-    </div>
-  </header>
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <div class="site-logo"></div>
+                <button class="logo-btn" onclick="showMainMenu()">
+                    <h1>BLACK<span>LEAGUE</span></h1>
+                </button>
+            </div>
+            
+            <nav class="main-nav">
+                <a href="#" class="nav-item" onclick="showStore()">MAĞAZA</a>
+                <a href="#" class="nav-item" onclick="showLeague()">LİGLER</a>
+                <a href="#" class="nav-item" onclick="showProfile()">PROFİL</a>
+                <a href="#" class="nav-item">DESTEK</a>
+            </nav>
 
-  <!-- GEZİNME PANELİ -->
-  <nav id="menuPanel">
-    <div class="menu-logo">
-      <span>BEYLUL</span> <span class="hub">HUB</span>
+            <nav class="auth-nav">
+                <a href="#" class="nav-btn" onclick="showLogin()">GİRİŞ YAP</a>
+                <a href="#" class="nav-btn" onclick="showRegister()">KAYIT OL</a>
+            </nav>
+        </header>
+
+        <main>
+            <!-- ANA EKRAN -->
+            <div class="screen" id="mainMenu">
+                <div class="welcome-screen">
+                    <h2>BLACKLEAGUE'YE HOŞ GELDİN!</h2>
+                    <div class="game-modes">
+                        <button class="mode-btn" onclick="showBotSelection()">BOT'A KARŞI</button>
+                        <button class="mode-btn online-highlight" onclick="findOnlineMatch()">ONLİNE OYNA</button>
+                        <button class="mode-btn" onclick="showLocalOptions()">2 KİŞİLİK</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BOT SEÇİM EKRANI -->
+            <div class="screen" id="botSelection" style="display: none;">
+                <div class="selection-screen">
+                    <h2>BOT ZORLUK SEÇ</h2>
+                    <div class="difficulty-levels">
+                        <div class="level-card" onclick="startBotGame('easy')">
+                            <div class="level-icon">🎯</div>
+                            <h3>KOLAY</h3>
+                            <p>Yeni başlayanlar için</p>
+                            <div class="level-stats">%70 Kazanma</div>
+                        </div>
+                        
+                        <div class="level-card highlight" onclick="startBotGame('medium')">
+                            <div class="level-icon">⚡</div>
+                            <h3>ORTA</h3>
+                            <p>Deneyimli oyuncular</p>
+                            <div class="level-stats">%50 Kazanma</div>
+                        </div>
+                        
+                        <div class="level-card" onclick="startBotGame('hard')">
+                            <div class="level-icon">🔥</div>
+                            <h3>ZOR</h3>
+                            <p>Usta oyuncular</p>
+                            <div class="level-stats">%30 Kazanma</div>
+                        </div>
+                    </div>
+                    <button class="back-btn" onclick="showMainMenu()">GERİ DÖN</button>
+                </div>
+            </div>
+
+            <!-- ONLINE EŞLEŞME BEKLEME EKRANI -->
+            <div class="screen" id="onlineWaitingScreen" style="display: none;">
+                <div class="waiting-screen">
+                    <h2>RAKİP ARANIYOR</h2>
+                    <div class="loading-spinner"></div>
+                    <div class="waiting-message" id="onlineWaitingMessage">Oyun aranıyor...</div>
+                    <div class="player-count" id="playerCount">Aktif oyuncu: 0</div>
+                    <button class="back-btn" onclick="cancelOnlineMatchmaking()">İPTAL</button>
+                </div>
+            </div>
+
+            <!-- 2 KİŞİLİK ODA SEÇİM EKRANI -->
+            <div class="screen" id="localOptionsScreen" style="display: none;">
+                <div class="selection-screen">
+                    <h2>2 KİŞİLİK OYUN</h2>
+                    <div class="game-modes">
+                        <button class="mode-btn" onclick="createLocalRoom()">ODA OLUŞTUR</button>
+                        <button class="mode-btn online-highlight" onclick="showJoinRoomScreen()">ODA KODU İLE KATIL</button>
+                    </div>
+                    <button class="back-btn" onclick="showMainMenu()">GERİ DÖN</button>
+                </div>
+            </div>
+
+            <!-- ODA OLUŞTURMA EKRANI -->
+            <div class="screen" id="localRoomScreen" style="display: none;">
+                <div class="waiting-screen">
+                    <h2>2 KİŞİLİK ODA</h2>
+                    
+                    <div class="room-code-section">
+                        <h3>ODA KODU</h3>
+                        <div class="code-display" id="roomCodeDisplay">ABCD</div>
+                        <p>Bu kodu arkadaşına ver ve oyunun başlamasını bekle</p>
+                        <button class="copy-btn" onclick="copyRoomCode()">KODU KOPYALA</button>
+                    </div>
+
+                    <div class="loading-spinner"></div>
+                    <div class="waiting-message" id="localWaitingMessage">Oyuncu bekleniyor...</div>
+                    
+                    <div class="players-waiting">
+                        <div class="player-badge">
+                            <h4>SEN</h4>
+                            <p>Hazır</p>
+                        </div>
+                        <div class="player-badge" id="player2Badge">
+                            <h4>2. OYUNCU</h4>
+                            <p>Katılmayı bekliyor...</p>
+                        </div>
+                    </div>
+
+                    <button class="back-btn" onclick="cancelLocalRoom()">ODAYI KAPAT</button>
+                </div>
+            </div>
+
+            <!-- ODA KODU İLE KATILMA EKRANI -->
+            <div class="screen" id="joinRoomScreen" style="display: none;">
+                <div class="selection-screen">
+                    <h2>ODA KODU İLE KATIL</h2>
+                    
+                    <div class="code-input-container">
+                        <input type="text" id="roomCodeInput" class="code-input" placeholder="ODA KODU" maxlength="4">
+                        <button class="mode-btn" style="width: 100%; margin-top: 20px;" onclick="joinLocalRoom()">ODAYA KATIL</button>
+                    </div>
+
+                    <button class="back-btn" onclick="showLocalOptions()">GERİ DÖN</button>
+                </div>
+            </div>
+
+            <!-- OYUN EKRANI -->
+            <div class="screen" id="gameScreen" style="display: none;">
+                <div class="game-table-container">
+                    <div class="table-background" id="tableBackground">
+                        <div class="game-content">
+                            <!-- LİG VE COIN BİLGİSİ -->
+                            <div class="game-stats">
+                                <div class="stat-box">
+                                    <h3>LİG PUANI</h3>
+                                    <div class="stat-value" id="leaguePoints">1,450</div>
+                                </div>
+                                <div class="stat-box">
+                                    <h3>COİNLER</h3>
+                                    <div class="stat-value" id="coins">2,500</div>
+                                </div>
+                                <div class="stat-box">
+                                    <h3>LİG</h3>
+                                    <div class="stat-value" id="currentLeague">GÜMÜŞ II</div>
+                                </div>
+                            </div>
+
+                            <!-- ONLINE OYUN BİLGİSİ -->
+                            <div id="onlineGameInfo" style="display: none;">
+                                <div class="online-player-info">
+                                    <h4>ONLİNE MAÇ</h4>
+                                    <p id="onlineMatchInfo">Rakip: Bulunuyor...</p>
+                                </div>
+                            </div>
+
+                            <!-- OYUNCU BİLGİLERİ -->
+                            <div class="player-info">
+                                <div class="player-stats">
+                                    <h3 id="opponentName">BOT</h3>
+                                    <p id="opponentLevel">Seviye: ORTA</p>
+                                    <p>Kart Tasarımı: <span id="opponentDesign">Klasik</span></p>
+                                    <p id="opponentStatus"></p>
+                                </div>
+                                <div class="player-stats">
+                                    <h3 id="playerName">SEN</h3>
+                                    <p>Kart Tasarımı: <span id="playerDesign">Klasik</span></p>
+                                    <p id="turnIndicator"></p>
+                                </div>
+                            </div>
+
+                            <!-- KART ALANLARI -->
+                            <div class="card-area">
+                                <!-- RAKİP KARTLARI -->
+                                <div class="dealer-area">
+                                    <div class="area-title" id="dealerTitle">BOT</div>
+                                    <div class="cards-container" id="dealerCards">
+                                        <!-- Kartlar JavaScript ile eklenecek -->
+                                    </div>
+                                    <div class="score" id="dealerScore"></div>
+                                </div>
+
+                                <!-- OYUNCU KARTLARI -->
+                                <div class="player-area">
+                                    <div class="area-title" id="playerTitle">SEN</div>
+                                    <div class="cards-container" id="playerCards">
+                                        <!-- Kartlar JavaScript ile eklenecek -->
+                                    </div>
+                                    <div class="score" id="playerScore"></div>
+                                </div>
+
+                                <!-- 2. OYUNCU KARTLARI (2 KİŞİLİK MOD İÇİN) -->
+                                <div class="player-area" id="player2Area" style="display: none;">
+                                    <div class="area-title" id="player2Title">2. OYUNCU</div>
+                                    <div class="cards-container" id="player2Cards">
+                                        <!-- Kartlar JavaScript ile eklenecek -->
+                                    </div>
+                                    <div class="score" id="player2Score"></div>
+                                </div>
+                            </div>
+
+                            <!-- OYUN KONTROLLERİ -->
+                            <div class="game-controls">
+                                <button class="control-btn" onclick="gameHit()" id="hitBtn">KART ÇEK</button>
+                                <button class="control-btn" onclick="gameStand()" id="standBtn">DUR</button>
+                                <button class="control-btn" onclick="exitGame()">ÇIKIŞ</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OYUN SONU EKRANI -->
+            <div class="game-result" id="gameResult" style="display: none;">
+                <div class="result-title" id="resultTitle">KAZANDIN</div>
+                <div class="result-reward" id="resultReward">
+                    <span class="coin-icon">🪙</span>
+                    +50
+                </div>
+                <button class="continue-btn" onclick="hideGameResult()">DEVAM ET</button>
+            </div>
+
+            <!-- MAĞAZA EKRANI -->
+            <div class="screen" id="storeScreen" style="display: none;">
+                <div class="selection-screen">
+                    <h2>KART TASARIM MAĞAZASI</h2>
+                    <div class="game-stats">
+                        <div class="stat-box" style="background: linear-gradient(145deg, #b8860b, #daa520);">
+                            <h3>COİNLERİN</h3>
+                            <div class="stat-value" id="storeCoins">2,500</div>
+                        </div>
+                    </div>
+                    
+                    <div class="store-items">
+                        <!-- KLASİK TASARIM - ÜCRETSİZ -->
+                        <div class="store-item">
+                            <h3>KLASİK TASARIM</h3>
+                            <div class="card-preview preview-classic">♥</div>
+                            <div class="item-price">ÜCRETSİZ</div>
+                            <button class="buy-btn owned" onclick="selectCardDesign('classic')">ZATEN SAHİPSİN</button>
+                        </div>
+                        
+                        <!-- BLACK RED TASARIM -->
+                        <div class="store-item">
+                            <h3>BLACK RED TASARIM</h3>
+                            <div class="card-preview preview-black-red">♥</div>
+                            <div class="item-price">500 COIN</div>
+                            <button class="buy-btn" onclick="buyItem('black_red', 500)" id="blackRedBtn">SATIN AL</button>
+                        </div>
+                        
+                        <!-- BLACK GOLD TASARIM -->
+                        <div class="store-item">
+                            <h3>BLACK GOLD TASARIM</h3>
+                            <div class="card-preview preview-black-gold">♠</div>
+                            <div class="item-price">1,200 COIN</div>
+                            <button class="buy-btn" onclick="buyItem('black_gold', 1200)" id="blackGoldBtn">SATIN AL</button>
+                        </div>
+                    </div>
+                    
+                    <button class="back-btn" onclick="showMainMenu()">GERİ DÖN</button>
+                </div>
+            </div>
+
+            <!-- LİG EKRANI -->
+            <div class="screen" id="leagueScreen" style="display: none;">
+                <div class="selection-screen">
+                    <h2>LİG SIRALAMASI</h2>
+                    <div class="game-stats">
+                        <div class="stat-box">
+                            <h3>MEVCUT LİGİN</h3>
+                            <div class="stat-value">GÜMÜŞ II</div>
+                        </div>
+                        <div class="stat-box">
+                            <h3>LİG PUANI</h3>
+                            <div class="stat-value">1,450 / 2,000</div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: linear-gradient(145deg, rgba(10, 95, 56, 0.3), rgba(8, 59, 36, 0.3)); padding: 30px; border-radius: 20px; margin: 30px auto; max-width: 600px; border: 3px solid #0a5f38; backdrop-filter: blur(10px);">
+                        <h3 style="color: #00ff88; margin-bottom: 25px; font-size: 1.8em; text-shadow: 0 0 10px rgba(0,255,136,0.5); font-family: 'Anton', sans-serif;">LİG SIRALAMASI</h3>
+                        <div style="text-align: left; font-size: 1.3em; line-height: 2.2; font-family: 'Anton', sans-serif;">
+                            <div>🥇 DEMİR - 0-999 LP</div>
+                            <div>🥈 BRONZ - 1000-1499 LP</div>
+                            <div>🥉 GÜMÜŞ - 1500-1999 LP</div>
+                            <div>🎖️ ALTIN - 2000-2499 LP</div>
+                            <div>💎 ELMAS - 2500+ LP</div>
+                        </div>
+                    </div>
+                    
+                    <button class="back-btn" onclick="showMainMenu()">GERİ DÖN</button>
+                </div>
+            </div>
+        </main>
     </div>
-    <a href="index.html">ANA SAYFA</a>
-    <a href="anidefteri.html">ANI DEFTERİ</a>
-    <a href="sozluk.html">SÖZLÜK</a>
-    <a href="eylul.html">EYLÜL</a>
-  </nav>
 
-  <!-- GİRİŞ EKRANI -->
-  <main class="landing">
-    <img src="images/eylul.jpg" alt="Eylül Fotoğrafı" class="landing-img">
-    <h1 class="landing-title">BEREN EYLÜL DOĞAN</h1>
-  </main>
+    <script>
+        // OYUN DEĞİŞKENLERİ
+        let gameState = {
+            deck: [],
+            playerCards: [],
+            dealerCards: [],
+            player2Cards: [],
+            playerScore: 0,
+            dealerScore: 0,
+            player2Score: 0,
+            gameOver: false,
+            currentPlayer: 'player',
+            gameMode: '', // 'bot', 'online', 'local'
+            botDifficulty: '',
+            roomCode: '',
+            isRoomHost: false
+        };
 
-  <script src="script.js"></script>
+        // ONLINE SİMÜLASYON DEĞİŞKENLERİ
+        let matchmakingInterval;
+        let roomCheckInterval;
+
+        // KULLANICI VERİLERİ
+        let userData = {
+            coins: 2500,
+            leaguePoints: 1450,
+            currentLeague: "GÜMÜŞ II",
+            cardDesign: "classic",
+            ownedDesigns: ["classic"],
+            username: "Oyuncu" + Math.floor(Math.random() * 10000)
+        };
+
+        // EKRAN GEÇİŞ FONKSİYONLARI
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.style.display = 'none';
+            });
+            document.getElementById(screenId).style.display = 'block';
+        }
+
+        function showMainMenu() {
+            // Tüm interval'leri temizle
+            clearInterval(matchmakingInterval);
+            clearInterval(roomCheckInterval);
+            showScreen('mainMenu');
+        }
+
+        function showBotSelection() {
+            showScreen('botSelection');
+        }
+
+        function showLocalOptions() {
+            showScreen('localOptionsScreen');
+        }
+
+        function showJoinRoomScreen() {
+            document.getElementById('roomCodeInput').value = '';
+            showScreen('joinRoomScreen');
+        }
+
+        // OYUN SONU MESAJI
+        function showGameResult(result, coins = 0) {
+            const resultElement = document.getElementById('gameResult');
+            const titleElement = document.getElementById('resultTitle');
+            const rewardElement = document.getElementById('resultReward');
+            
+            resultElement.style.display = 'block';
+            
+            if (result === 'win') {
+                titleElement.textContent = 'KAZANDIN';
+                titleElement.className = 'result-title result-win';
+                rewardElement.innerHTML = `<span class="coin-icon">🪙</span> +${coins}`;
+                rewardElement.style.display = 'flex';
+            } else if (result === 'lose') {
+                titleElement.textContent = 'KAYBETTİN';
+                titleElement.className = 'result-title result-lose';
+                rewardElement.style.display = 'none';
+            } else {
+                titleElement.textContent = 'BERABERE';
+                titleElement.className = 'result-title result-draw';
+                rewardElement.style.display = 'none';
+            }
+        }
+
+        function hideGameResult() {
+            document.getElementById('gameResult').style.display = 'none';
+            showMainMenu();
+        }
+
+        // ONLINE EŞLEŞME SİSTEMİ
+        function findOnlineMatch() {
+            showScreen('onlineWaitingScreen');
+            document.getElementById('onlineWaitingMessage').textContent = 'Gerçek oyuncu aranıyor...';
+            
+            // Basit online oyuncu sayısı
+            const playerCount = Math.floor(Math.random() * 50) + 20;
+            document.getElementById('playerCount').textContent = `Çevrimiçi: ${playerCount}`;
+            
+            // Daha kısa bekleme süresi
+            let waitTime = Math.random() * 3000 + 2000; // 2-5 saniye arası
+            
+            matchmakingInterval = setInterval(() => {
+                // Bekleme mesajını değiştir
+                const messages = ['Oyuncu aranıyor...', 'Rakip bulunuyor...', 'Eşleştirme yapılıyor...'];
+                const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+                document.getElementById('onlineWaitingMessage').textContent = randomMessage;
+            }, 1000);
+            
+            setTimeout(() => {
+                clearInterval(matchmakingInterval);
+                startOnlineGame();
+            }, waitTime);
+        }
+
+        function cancelOnlineMatchmaking() {
+            clearInterval(matchmakingInterval);
+            showMainMenu();
+        }
+
+        function startOnlineGame() {
+            gameState.gameMode = 'online';
+            
+            // Online oyun bilgilerini göster
+            document.getElementById('onlineGameInfo').style.display = 'block';
+            document.getElementById('onlineMatchInfo').textContent = `Rakip: ${generateRandomUsername()}`;
+            
+            document.getElementById('opponentName').textContent = 'RAKİP';
+            document.getElementById('opponentLevel').textContent = 'Seviye: ONLINE';
+            document.getElementById('dealerTitle').textContent = 'RAKİP';
+            document.getElementById('player2Area').style.display = 'none';
+            
+            initializeGame();
+        }
+
+        // 2 KİŞİLİK ODA SİSTEMİ
+        function createLocalRoom() {
+            // Rastgele oda kodu oluştur
+            gameState.roomCode = generateRoomCode();
+            gameState.isRoomHost = true;
+            
+            document.getElementById('roomCodeDisplay').textContent = gameState.roomCode;
+            showScreen('localRoomScreen');
+            
+            // 10 saniye bekleme süresi
+            let waitTime = 10000;
+            
+            roomCheckInterval = setInterval(() => {
+                document.getElementById('localWaitingMessage').textContent = 'Oyuncu bekleniyor...';
+            }, 1500);
+            
+            setTimeout(() => {
+                clearInterval(roomCheckInterval);
+                if (document.getElementById('localRoomScreen').style.display !== 'none') {
+                    startLocalGame();
+                }
+            }, waitTime);
+        }
+
+        function joinLocalRoom() {
+            let code = document.getElementById('roomCodeInput').value.toUpperCase();
+            if (code.length === 4) {
+                gameState.roomCode = code;
+                gameState.isRoomHost = false;
+                
+                // Odaya katılma simülasyonu
+                showScreen('localRoomScreen');
+                document.getElementById('roomCodeDisplay').textContent = code;
+                document.getElementById('localWaitingMessage').textContent = 'Oyuna katılıyor...';
+                
+                setTimeout(() => {
+                    startLocalGame();
+                }, 1500);
+            } else {
+                alert('Geçersiz oda kodu! 4 harf girin.');
+            }
+        }
+
+        function copyRoomCode() {
+            navigator.clipboard.writeText(gameState.roomCode).then(() => {
+                alert('Oda kodu kopyalandı: ' + gameState.roomCode);
+            });
+        }
+
+        function cancelLocalRoom() {
+            clearInterval(roomCheckInterval);
+            showMainMenu();
+        }
+
+        function generateRoomCode() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            let result = '';
+            for (let i = 0; i < 4; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+
+        function generateRandomUsername() {
+            const names = ['KartUstası', 'BlackjackŞampiyonu', 'KumarhaneKralı', 'ŞanslıOyuncu', 'ProfesyonelOyunçu', 'YenilmezRakip'];
+            return names[Math.floor(Math.random() * names.length)] + Math.floor(Math.random() * 100);
+        }
+
+        // OYUN MOTORU
+        function startBotGame(difficulty) {
+            gameState.gameMode = 'bot';
+            gameState.botDifficulty = difficulty;
+            document.getElementById('opponentName').textContent = 'BOT';
+            document.getElementById('opponentLevel').textContent = 'Seviye: ' + difficulty.toUpperCase();
+            document.getElementById('dealerTitle').textContent = 'BOT';
+            document.getElementById('player2Area').style.display = 'none';
+            document.getElementById('onlineGameInfo').style.display = 'none';
+            initializeGame();
+        }
+
+        function startLocalGame() {
+            gameState.gameMode = 'local';
+            
+            if (gameState.isRoomHost) {
+                document.getElementById('opponentName').textContent = '2. OYUNCU';
+                document.getElementById('dealerTitle').textContent = '2. OYUNCU';
+            } else {
+                document.getElementById('opponentName').textContent = 'ODA SAHİBİ';
+                document.getElementById('dealerTitle').textContent = 'ODA SAHİBİ';
+            }
+            
+            document.getElementById('opponentLevel').textContent = '';
+            document.getElementById('player2Area').style.display = 'block';
+            
+            initializeGame();
+        }
+
+        function initializeGame() {
+            // Oyun durumunu sıfırla
+            gameState.deck = createDeck();
+            gameState.playerCards = [];
+            gameState.dealerCards = [];
+            gameState.player2Cards = [];
+            gameState.playerScore = 0;
+            gameState.dealerScore = 0;
+            gameState.player2Score = 0;
+            gameState.gameOver = false;
+            gameState.currentPlayer = 'player';
+            
+            // İlk kartları dağıt
+            gameState.playerCards.push(drawCard());
+            gameState.dealerCards.push(drawCard());
+            gameState.playerCards.push(drawCard());
+            gameState.dealerCards.push(drawCard());
+            
+            if (gameState.gameMode === 'local') {
+                gameState.player2Cards.push(drawCard());
+                gameState.player2Cards.push(drawCard());
+                gameState.player2Score = calculateScore(gameState.player2Cards);
+            }
+            
+            gameState.playerScore = calculateScore(gameState.playerCards);
+            gameState.dealerScore = calculateScore(gameState.dealerCards);
+            
+            // Oyun ekranını göster
+            showScreen('gameScreen');
+            updateGameUI();
+            
+            // Kontrolleri aktif et
+            document.getElementById('hitBtn').disabled = false;
+            document.getElementById('standBtn').disabled = false;
+            
+            // Sıra göstergesini güncelle
+            updateTurnIndicator();
+        }
+
+        function createDeck() {
+            const suits = ['hearts', 'diamonds', 'clubs', 'spades'];
+            const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+            let deck = [];
+            
+            for (let suit of suits) {
+                for (let value of values) {
+                    deck.push({ suit, value });
+                }
+            }
+            
+            return shuffleDeck(deck);
+        }
+
+        function shuffleDeck(deck) {
+            for (let i = deck.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [deck[i], deck[j]] = [deck[j], deck[i]];
+            }
+            return deck;
+        }
+
+        function drawCard() {
+            if (gameState.deck.length === 0) {
+                gameState.deck = createDeck();
+            }
+            return gameState.deck.pop();
+        }
+
+        function calculateScore(cards) {
+            let score = 0;
+            let aces = 0;
+            
+            for (let card of cards) {
+                if (card.value === 'A') {
+                    aces += 1;
+                } else if (['K', 'Q', 'J'].includes(card.value)) {
+                    score += 10;
+                } else {
+                    score += parseInt(card.value);
+                }
+            }
+            
+            for (let i = 0; i < aces; i++) {
+                if (score + 11 <= 21) {
+                    score += 11;
+                } else {
+                    score += 1;
+                }
+            }
+            
+            return score;
+        }
+
+        function gameHit() {
+            if (gameState.gameOver) return;
+            
+            if (gameState.currentPlayer === 'player') {
+                gameState.playerCards.push(drawCard());
+                gameState.playerScore = calculateScore(gameState.playerCards);
+                
+                if (gameState.playerScore > 21) {
+                    gameStand();
+                }
+            } else if (gameState.currentPlayer === 'player2') {
+                gameState.player2Cards.push(drawCard());
+                gameState.player2Score = calculateScore(gameState.player2Cards);
+                
+                if (gameState.player2Score > 21) {
+                    nextTurn();
+                }
+            }
+            
+            updateGameUI();
+        }
+
+        function gameStand() {
+            if (gameState.gameOver) return;
+            
+            if (gameState.gameMode === 'local') {
+                nextTurn();
+            } else {
+                endGame();
+            }
+        }
+
+        function nextTurn() {
+            if (gameState.currentPlayer === 'player') {
+                gameState.currentPlayer = 'player2';
+                updateTurnIndicator();
+                
+                // 2. oyuncu otomatik oynasın
+                if (gameState.gameMode === 'local' && !gameState.isRoomHost) {
+                    setTimeout(() => {
+                        autoPlayPlayer2();
+                    }, 1000);
+                }
+            } else {
+                endGame();
+            }
+        }
+
+        function autoPlayPlayer2() {
+            // Basit AI - 17'den küçükse kart çek
+            while (gameState.player2Score < 17 && gameState.player2Score <= 21) {
+                gameState.player2Cards.push(drawCard());
+                gameState.player2Score = calculateScore(gameState.player2Cards);
+                updateGameUI();
+            }
+            gameStand();
+        }
+
+        function updateTurnIndicator() {
+            const indicator = document.getElementById('turnIndicator');
+            if (gameState.gameMode === 'local') {
+                if (gameState.currentPlayer === 'player') {
+                    indicator.textContent = 'Sıra: SEN';
+                    indicator.style.color = '#00ff88';
+                } else {
+                    indicator.textContent = 'Sıra: 2. OYUNCU';
+                    indicator.style.color = '#ff5252';
+                }
+            } else {
+                indicator.textContent = '';
+            }
+        }
+
+        function endGame() {
+            gameState.gameOver = true;
+            
+            if (gameState.gameMode === 'bot') {
+                botPlay();
+            } else if (gameState.gameMode === 'online') {
+                dealerPlay();
+            }
+            
+            updateGameUI();
+            determineWinner();
+        }
+
+        function botPlay() {
+            let targetScore = 17;
+            
+            if (gameState.botDifficulty === 'easy') {
+                targetScore = 16;
+            } else if (gameState.botDifficulty === 'hard') {
+                targetScore = 18;
+            }
+            
+            while (gameState.dealerScore < targetScore && gameState.dealerScore <= 21) {
+                gameState.dealerCards.push(drawCard());
+                gameState.dealerScore = calculateScore(gameState.dealerCards);
+            }
+        }
+
+        function dealerPlay() {
+            while (gameState.dealerScore < 17 && gameState.dealerScore <= 21) {
+                gameState.dealerCards.push(drawCard());
+                gameState.dealerScore = calculateScore(gameState.dealerCards);
+            }
+        }
+
+        function determineWinner() {
+            let result = '';
+            let coins = 0;
+            
+            if (gameState.gameMode === 'local') {
+                // 2 kişilik mod
+                if (gameState.playerScore > 21 && gameState.player2Score > 21) {
+                    result = 'lose';
+                } else if (gameState.playerScore > 21) {
+                    result = 'lose';
+                } else if (gameState.player2Score > 21) {
+                    result = 'win';
+                    if (gameState.gameMode === 'online') coins = 50;
+                } else if (gameState.playerScore > gameState.player2Score) {
+                    result = 'win';
+                    if (gameState.gameMode === 'online') coins = 50;
+                } else if (gameState.playerScore < gameState.player2Score) {
+                    result = 'lose';
+                } else {
+                    result = 'draw';
+                }
+            } else {
+                // Bot veya online mod
+                if (gameState.playerScore > 21) {
+                    result = 'lose';
+                } else if (gameState.dealerScore > 21) {
+                    result = 'win';
+                    if (gameState.gameMode === 'online') coins = 50;
+                } else if (gameState.playerScore > gameState.dealerScore) {
+                    result = 'win';
+                    if (gameState.gameMode === 'online') coins = 50;
+                } else if (gameState.playerScore < gameState.dealerScore) {
+                    result = 'lose';
+                } else {
+                    result = 'draw';
+                }
+            }
+            
+            if (result === 'win' && gameState.gameMode === 'online') {
+                userData.coins += coins;
+                userData.leaguePoints += 25;
+                updateLeague();
+                updateGameStats();
+            }
+            
+            setTimeout(() => {
+                showGameResult(result, coins);
+            }, 1000);
+        }
+
+        function updateLeague() {
+            if (userData.leaguePoints >= 2500) {
+                userData.currentLeague = "ELMAS I";
+            } else if (userData.leaguePoints >= 2000) {
+                userData.currentLeague = "ALTIN I";
+            } else if (userData.leaguePoints >= 1500) {
+                userData.currentLeague = "GÜMÜŞ I";
+            } else if (userData.leaguePoints >= 1000) {
+                userData.currentLeague = "BRONZ I";
+            } else {
+                userData.currentLeague = "DEMİR I";
+            }
+        }
+
+        function updateGameUI() {
+            // Oyuncu kartlarını güncelle
+            updateCardDisplay('playerCards', gameState.playerCards);
+            document.getElementById('playerScore').textContent = 'Skor: ' + gameState.playerScore;
+            
+            // Rakip kartlarını güncelle
+            updateCardDisplay('dealerCards', gameState.dealerCards);
+            let dealerScoreText = gameState.gameOver ? gameState.dealerScore : '?';
+            if (gameState.gameMode === 'local') {
+                dealerScoreText = gameState.player2Score;
+            }
+            document.getElementById('dealerScore').textContent = 'Skor: ' + dealerScoreText;
+            
+            // 2. oyuncu kartlarını güncelle
+            if (gameState.gameMode === 'local') {
+                updateCardDisplay('player2Cards', gameState.player2Cards);
+                document.getElementById('player2Score').textContent = 'Skor: ' + gameState.player2Score;
+            }
+            
+            // Oyun kontrollerini güncelle
+            const hitBtn = document.getElementById('hitBtn');
+            const standBtn = document.getElementById('standBtn');
+            
+            if (gameState.gameOver || (gameState.gameMode === 'local' && gameState.currentPlayer !== 'player')) {
+                hitBtn.disabled = true;
+                standBtn.disabled = true;
+            } else {
+                hitBtn.disabled = false;
+                standBtn.disabled = false;
+            }
+        }
+
+        function updateCardDisplay(containerId, cards) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            cards.forEach((card, index) => {
+                const cardElement = document.createElement('div');
+                cardElement.className = 'card';
+                
+                // Gizli kart kontrolü
+                let showCardBack = false;
+                
+                // Bot modunda ve dealer kartları için ilk kartı gizle
+                if (containerId === 'dealerCards' && index === 0 && !gameState.gameOver && 
+                    (gameState.gameMode === 'bot' || gameState.gameMode === 'online')) {
+                    showCardBack = true;
+                }
+                
+                // 2 kişilik modda ve player2 kartları için ilk kartı gizle
+                if (containerId === 'player2Cards' && index === 0 && !gameState.gameOver && 
+                    gameState.gameMode === 'local' && gameState.currentPlayer === 'player') {
+                    showCardBack = true;
+                }
+                
+                if (showCardBack) {
+                    cardElement.classList.add('card-back');
+                } else {
+                    // Kart rengini belirle
+                    if (card.suit === 'hearts' || card.suit === 'diamonds') {
+                        cardElement.classList.add('red');
+                    } else {
+                        cardElement.classList.add('black');
+                    }
+                    
+                    // Kart değerini ve simgesini göster
+                    const topCorner = document.createElement('div');
+                    topCorner.className = 'card-corner top';
+                    topCorner.textContent = getCardSymbol(card);
+                    
+                    const suit = document.createElement('div');
+                    suit.className = 'card-suit';
+                    suit.textContent = getSuitSymbol(card.suit);
+                    
+                    const bottomCorner = document.createElement('div');
+                    bottomCorner.className = 'card-corner bottom';
+                    bottomCorner.textContent = getCardSymbol(card);
+                    
+                    cardElement.appendChild(topCorner);
+                    cardElement.appendChild(suit);
+                    cardElement.appendChild(bottomCorner);
+                }
+                
+                container.appendChild(cardElement);
+            });
+        }
+
+        function getCardSymbol(card) {
+            return card.value;
+        }
+
+        function getSuitSymbol(suit) {
+            const symbols = {
+                'hearts': '♥',
+                'diamonds': '♦',
+                'clubs': '♣',
+                'spades': '♠'
+            };
+            return symbols[suit] || suit;
+        }
+
+        function exitGame() {
+            if (confirm('Oyundan çıkmak istediğinize emin misiniz?')) {
+                showMainMenu();
+            }
+        }
+
+        // MAĞAZA İŞLEMLERİ
+        function showStore() {
+            document.getElementById('storeCoins').textContent = userData.coins.toLocaleString();
+            updateStoreButtons();
+            showScreen('storeScreen');
+        }
+
+        function buyItem(design, price) {
+            if (userData.ownedDesigns.includes(design)) {
+                alert('Zaten bu tasarıma sahipsin!');
+                return;
+            }
+
+            if (userData.coins >= price) {
+                userData.coins -= price;
+                userData.ownedDesigns.push(design);
+                alert('Tasarım başarıyla satın alındı!');
+                updateGameStats();
+                updateStoreButtons();
+            } else {
+                alert('Yeterli coinin yok! Daha fazla oyna ve coin kazan.');
+            }
+        }
+
+        function updateStoreButtons() {
+            const blackRedBtn = document.getElementById('blackRedBtn');
+            const blackGoldBtn = document.getElementById('blackGoldBtn');
+            
+            if (userData.ownedDesigns.includes('black_red')) {
+                blackRedBtn.textContent = 'ZATEN SAHİPSİN';
+                blackRedBtn.classList.add('owned');
+                blackRedBtn.onclick = () => selectCardDesign('black_red');
+            }
+            
+            if (userData.ownedDesigns.includes('black_gold')) {
+                blackGoldBtn.textContent = 'ZATEN SAHİPSİN';
+                blackGoldBtn.classList.add('owned');
+                blackGoldBtn.onclick = () => selectCardDesign('black_gold');
+            }
+        }
+
+        function selectCardDesign(design) {
+            if (!userData.ownedDesigns.includes(design)) {
+                alert('Bu tasarıma sahip değilsin! Mağazadan satın alabilirsin.');
+                return;
+            }
+            
+            userData.cardDesign = design;
+            document.getElementById('playerDesign').textContent = getDesignName(design);
+            alert('Kart tasarımı değiştirildi: ' + getDesignName(design));
+        }
+
+        function getDesignName(design) {
+            const names = {
+                'classic': 'Klasik',
+                'black_red': 'Black Red', 
+                'black_gold': 'Black Gold'
+            };
+            return names[design] || design;
+        }
+
+        // DİĞER FONKSİYONLAR
+        function showLeague() {
+            showScreen('leagueScreen');
+        }
+
+        function showProfile() {
+            alert("Profil: " + userData.username + "\nLP: " + userData.leaguePoints + "\nCoin: " + userData.coins + "\nLig: " + userData.currentLeague);
+        }
+
+        function showLogin() {
+            alert("Giriş ekranı yakında eklenecek!");
+        }
+
+        function showRegister() {
+            alert("Kayıt ekranı yakında eklenecek!");
+        }
+
+        // Oyun istatistiklerini güncelle
+        function updateGameStats() {
+            document.getElementById('coins').textContent = userData.coins.toLocaleString();
+            document.getElementById('leaguePoints').textContent = userData.leaguePoints.toLocaleString();
+            document.getElementById('currentLeague').textContent = userData.currentLeague;
+        }
+
+        // İlk yüklemede istatistikleri güncelle
+        updateGameStats();
+    </script>
 </body>
 </html>
